@@ -9,8 +9,8 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from the current directory, auto-resolving .html extensions
-app.use(express.static(path.join(__dirname), { extensions: ['html'] }));
+// Serve static files from the parent directory, auto-resolving .html extensions
+app.use(express.static(path.join(__dirname, '..'), { extensions: ['html'] }));
 
 app.get('/api/firebase-config', (req, res) => {
     res.json({
@@ -173,7 +173,12 @@ app.get('/api/weather', async (req, res) => {
     }
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}`);
-});
+// Export for Vercel
+module.exports = app;
+
+// Start server locally
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`Server is running at http://localhost:${PORT}`);
+    });
+}
