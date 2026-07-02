@@ -72,7 +72,7 @@
                     document.getElementById('displayName').value = user.displayName;
                 }
             } else {
-                window.location.href = "signin.html";
+                window.location.href = "signin";
             }
         });
 
@@ -86,7 +86,7 @@
                 updateProfile(auth.currentUser, {
                     displayName: name
                 }).then(() => {
-                    window.location.href = "dashboard.html";
+                    window.location.href = "dashboard";
                 }).catch((err) => {
                     alert(err.message);
                     btn.textContent = orig;
