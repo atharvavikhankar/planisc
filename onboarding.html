@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLANISC - Welcome</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .onboarding-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: var(--bg-secondary);
+        }
+        .onboarding-card {
+            background: #fff;
+            padding: 48px;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .onboarding-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .onboarding-subtitle {
+            color: var(--text-muted);
+            font-size: 15px;
+            margin-bottom: 32px;
+        }
+    </style>
+</head>
+<body>
+    <div class="onboarding-container">
+        <div class="onboarding-card">
+            <h1 class="onboarding-title">Welcome to PLANISC</h1>
+            <p class="onboarding-subtitle">What should we call you?</p>
+            <form id="onboardingForm" class="signup-form">
+                <div class="form-group" style="text-align: left;">
+                    <label for="displayName">Your name</label>
+                    <input type="text" id="displayName" required>
+                </div>
+                <button type="submit" class="btn btn-black btn-full signup-submit" style="margin-top: 16px;">Continue to Dashboard</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase App -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+        const configRes = await fetch('/api/firebase-config');
+        const firebaseConfig = await configRes.json();
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // Pre-fill if Google provided a name
+                if (user.displayName && !document.getElementById('displayName').value) {
+                    document.getElementById('displayName').value = user.displayName;
+                }
+            } else {
+                window.location.href = "signin.html";
+            }
+        });
+
+        document.getElementById('onboardingForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('displayName').value;
+            if (auth.currentUser) {
+                const btn = e.target.querySelector('button');
+                const orig = btn.textContent;
+                btn.textContent = 'Saving...';
+                updateProfile(auth.currentUser, {
+                    displayName: name
+                }).then(() => {
+                    window.location.href = "dashboard.html";
+                }).catch((err) => {
+                    alert(err.message);
+                    btn.textContent = orig;
+                });
+            }
+        });
+    </script>
+</body>
+</html>

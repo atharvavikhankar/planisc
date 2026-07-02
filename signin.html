@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLANISC - Sign In</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=23">
+    <script src="toast.js?v=2"></script>
+</head>
+<body class="split-page">
+    <div class="split-layout">
+        
+        <!-- LEFT: Stunning Mesh & Glassmorphism (No Images) -->
+        <div class="split-left">
+            <div class="mesh-bg"></div>
+            
+            <div class="split-left-inner">
+                <a href="index.html" class="split-logo">
+                    <img src="PLANISC%20WESITE%20CORNER.png" alt="PLANISC">
+                </a>
+
+                <div class="split-text-group">
+                    <h1 class="split-title">Welcome back.</h1>
+                    <p class="split-subtitle">Your perfect trips are waiting.</p>
+                </div>
+
+                <div class="floating-cards">
+                    <!-- Itinerary Glass Card -->
+                    <div class="glass-card itinerary-card" style="transform: rotate(2deg) translateY(20px);">
+                        <div class="glass-header-split">
+                            <span>Upcoming: Tokyo</span>
+                            <span class="glass-cost">7 Days</span>
+                        </div>
+                        <div class="glass-timeline">
+                            <div class="glass-item">
+                                <div class="glass-dot dot-orange"></div>
+                                <div class="glass-content">
+                                    <div class="glass-time">Day 1 &middot; 14:00</div>
+                                    <div class="glass-title">Check in at Shinjuku Granbell</div>
+                                </div>
+                            </div>
+                            <div class="glass-item">
+                                <div class="glass-dot dot-green"></div>
+                                <div class="glass-content">
+                                    <div class="glass-time">19:00</div>
+                                    <div class="glass-title">Dinner at Omoide Yokocho</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Pristine Form -->
+        <div class="split-right">
+            <div class="split-form-wrapper">
+                <div class="split-mobile-logo">
+                    <a href="index.html">
+                        <img src="PLANISC%20WESITE%20CORNER.png" alt="PLANISC">
+                    </a>
+                </div>
+                
+                <div class="form-header">
+                    <h2>Sign in to PLANISC</h2>
+                    <p>Welcome back! Please enter your details.</p>
+                </div>
+
+                <button type="button" class="btn-google" onclick="window.location.href='dashboard.html'">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M23.52 12.273c0-.851-.076-1.67-.218-2.46H12v4.656h6.455c-.278 1.505-1.129 2.78-2.424 3.647v3.028h3.927c2.298-2.116 3.562-5.234 3.562-8.871z" fill="#4285F4"/><path fill-rule="evenodd" clip-rule="evenodd" d="M12 24c3.24 0 5.956-1.075 7.942-2.909l-3.927-3.028c-1.075.72-2.45 1.145-4.015 1.145-3.087 0-5.702-2.083-6.635-4.888H1.304v3.132C3.29 21.404 7.33 24 12 24z" fill="#34A853"/><path fill-rule="evenodd" clip-rule="evenodd" d="M5.365 14.32A6.924 6.924 0 0 1 5 12c0-.796.136-1.57.365-2.32V6.548H1.304A11.968 11.968 0 0 0 0 12c0 1.933.46 3.765 1.304 5.452l4.061-3.132z" fill="#FBBC05"/><path fill-rule="evenodd" clip-rule="evenodd" d="M12 4.79c1.762 0 3.344.606 4.588 1.792l3.442-3.442C17.95 1.196 15.234 0 12 0 7.33 0 3.29 2.596 1.304 6.548l4.061 3.132C6.298 6.873 8.913 4.79 12 4.79z" fill="#EA4335"/></svg>
+                    Continue with Google
+                </button>
+
+                <div class="divider">
+                    <span>OR</span>
+                </div>
+
+                <form action="dashboard.html" method="GET">
+                    <div class="input-group">
+                        <label>Email address</label>
+                        <input type="email" placeholder="john@example.com" required>
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-header">
+                            <label>Password</label>
+                            <a href="#" class="forgot-link">Forgot password?</a>
+                        </div>
+                        <div class="password-wrap">
+                            <input type="password" placeholder="••••••••" required>
+                            <button type="button" class="btn-show">Show</button>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Sign in</button>
+                </form>
+
+                <div class="form-footer" style="margin-top: 32px;">
+                    <p class="switch-link">Don't have an account? <a href="signup.html">Sign up free</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Firebase Auth -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+        const configRes = await fetch('/api/firebase-config');
+        const firebaseConfig = await configRes.json();
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        const form = document.querySelector('form');
+        const googleBtn = document.querySelector('.btn-google');
+        const emailInput = document.querySelector('input[type="email"]');
+        const passwordInput = document.querySelector('input[type="password"]');
+        
+        googleBtn.onclick = null;
+        
+        googleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            signInWithPopup(auth, provider).then((result) => {
+                window.location.href = "dashboard.html";
+            }).catch((error) => {
+                alert(error.message);
+            });
+        });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value)
+                .then((userCredential) => {
+                    window.location.href = "dashboard.html";
+                })
+                .catch((error) => {
+                    alert(error.message);
+                });
+        });
+    </script>
+</body>
+</html>

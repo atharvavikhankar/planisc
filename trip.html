@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLANISC - Trip Planner</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=8">
+    <link rel="stylesheet" href="planner.css?v=8">
+    <script src="toast.js"></script>
+</head>
+<body class="planner-body">
+    
+    <div class="planner-layout">
+        <!-- LEFT PANEL -->
+        <aside class="planner-left">
+            <div class="planner-header fade-in-up">
+                <a href="dashboard.html" class="back-link">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    Back to Dashboard
+                </a>
+                <h1 class="planner-title">Plan your journey with <span class="brand-text">PLANISC</span></h1>
+            </div>
+            
+            <div class="planner-wizard-container" id="wizardContainer">
+                <div class="wizard-header">
+                    <button id="wizardBackBtn" class="back-link" style="display:none; padding:0; border:none; background:none; cursor:pointer; margin-bottom:12px; margin-top: -12px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 6px;"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                        Back
+                    </button>
+                    <h2 id="wizardQuestion" style="display:none;"></h2>
+                    <p id="wizardSubtitle" style="display:none;"></p>
+                </div>
+
+                <form id="tripPlannerForm" class="chat-form fade-in-up" style="animation-delay: 0.1s;">
+                    <div class="chat-input-box" id="inputBoxContainer">
+                        <textarea id="chatInput" placeholder="e.g. 5 days in Japan with my partner..." rows="3" required></textarea>
+                        <div class="chat-input-actions" style="justify-content: flex-end;">
+                            <button type="submit" class="icon-btn-chat submit-chat" id="sendBtn" style="margin-left: auto;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="wizard-options" id="wizardOptions" style="display: none;">
+                    <!-- Dynamically populated buttons -->
+                </div>
+
+                <div class="suggested-prompts fade-in-up" id="suggestedPrompts" style="animation-delay: 0.2s;">
+                    <button class="suggest-pill">
+                        <span class="pill-text">5 days in Tuscany, wine & slow travel</span>
+                        <svg class="pill-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                    <button class="suggest-pill">
+                        <span class="pill-text">10 days in Japan, Tokyo & Kyoto for $4000</span>
+                        <svg class="pill-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                    <button class="suggest-pill">
+                        <span class="pill-text">A romantic weekend getaway to Amalfi Coast</span>
+                        <svg class="pill-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- RIGHT PANEL -->
+        <main class="planner-right">
+            <div class="itinerary-center-wrapper">
+                <div class="itinerary-header" id="itineraryHeader" style="display: none;">
+                    
+                    <div id="weatherBar" class="weather-bar" style="display: none;">
+                        <div class="weather-info">
+                            <span class="wb-icon" id="wbIcon">☀️</span>
+                            <span class="wb-temp"><span id="wbTemp">--</span>°C</span>
+                            <span class="wb-city" id="wbCity">City</span>
+                            <div class="wb-details">
+                                <span>💨 <span id="wbWind">--</span> km/h</span>
+                                <span>💧 <span id="wbPrecip">--</span> mm</span>
+                            </div>
+                        </div>
+                        <div id="wbDisruption" class="weather-disruption" style="display: none;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                            <span id="wbDisruptionText">Heavy rain expected this afternoon — PLANISC will replan outdoor activities.</span>
+                        </div>
+                    </div>
+
+                    <h2 id="tripTitle">Your Trip</h2>
+                    <div class="day-pills" id="dayPillsContainer">
+                        <!-- Pills injected by JS -->
+                    </div>
+                </div>
+
+                <div class="timeline-container" id="timelineContainer">
+                    <div class="empty-planner-state fade-in" id="emptyState">
+                        <div class="clean-empty-state">
+                            <div class="icon-wrapper">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                                </svg>
+                            </div>
+                            <h3>Where to next?</h3>
+                            <p>Describe your dream destination, and our system will curate a personalized itinerary for you.</p>
+                        </div>
+                    </div>
+                    
+                    <div id="itineraryContent">
+                        <!-- Cards injected by JS -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Side Drawer -->
+    <div class="drawer-overlay" id="drawerOverlay">
+        <div class="drawer" id="itemDrawer">
+            <button class="drawer-close" id="closeDrawer">&times;</button>
+            <div class="drawer-header">
+                <span class="drawer-badge" id="drawerBadge">ACTIVITY</span>
+                <h2 id="drawerTitle">Title</h2>
+                <div class="drawer-meta">
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg> <span id="drawerTime">Time</span></span>
+                </div>
+                <div class="drawer-meta">
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> <span id="drawerLocation">Location</span></span>
+                </div>
+                <div class="drawer-meta">
+                    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg> <span id="drawerCost">Cost</span></span>
+                </div>
+            </div>
+            <div class="drawer-body">
+                <p id="drawerDesc">Description</p>
+            </div>
+            <div class="drawer-footer">
+                <button class="btn-generate">Book now &rarr;</button>
+                <a href="#" class="swap-link">Swap this item</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="planner_v2.js"></script>
+</body>
+</html>
